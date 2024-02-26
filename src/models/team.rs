@@ -3,9 +3,18 @@
  * Created 2024-02-07
  */
 
-use crate::models::organization::Organization;
-use crate::models::units_map::UnitsMap;
+use crate::Organization;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
+
+#[derive(Debug, Serialize, Deserialize)]
+pub enum Permission {
+    None,
+    Read,
+    Write,
+    Admin,
+    Owner,
+}
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Team {
@@ -15,7 +24,7 @@ pub struct Team {
     pub includes_all_repositories: bool,
     pub name: String,
     pub organization: Organization,
-    pub permission: String,
+    pub permission: Permission,
     pub units: Vec<String>,
-    pub units_map: UnitsMap,
+    pub units_map: HashMap<String, Permission>,
 }

@@ -3,12 +3,11 @@
  * Created 2024-02-10
  */
 use crate::api_error::ApiError;
-use crate::models::create_repo_options::CreateRepoOptions;
-use crate::models::repository::Repository;
+pub use crate::models::*;
 use url::Url;
 
 pub mod api_error;
-pub mod models;
+mod models;
 
 pub struct GiteaApi {
     base_url: String,
@@ -22,16 +21,31 @@ impl GiteaApi {
     pub fn new(base_url: &str, username: Option<&str>, password: Option<&str>) -> GiteaApi {
         GiteaApi {
             base_url: base_url.to_owned(),
-            username: if let Some(username) = username {
-                Some(username.to_owned())
-            } else {
-                None
-            },
-            password: if let Some(password) = password {
-                Some(password.to_owned())
-            } else {
-                None
-            },
+            username: username.map(|username| username.to_owned()),
+            password: password.map(|password| password.to_owned()),
+        }
+    }
+
+    // GET from /repos/search?q=<contains>
+    pub async fn search_repos(
+        &self,
+        contains: Option<&String>,
+    ) -> Result<SearchReposResult, ApiError> {
+        let path = vec!["repos", "search"];
+        match self.build_url(path) {
+            Ok(url) => {
+                let client = reqwest::Client::new();
+                let mut request_builder = client.get(url);
+                if let Some(contains) = contains {
+                    request_builder = request_builder.query(&[("q", contains)]);
+                }
+                let response = request_builder.send().await?;
+                match response.error_for_status() {
+                    Ok(response) => Ok(response.json::<SearchReposResult>().await?),
+                    Err(error) => Err(ApiError::from(error)),
+                }
+            }
+            Err(error) => Err(ApiError::from(error)),
         }
     }
 

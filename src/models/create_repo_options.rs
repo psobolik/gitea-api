@@ -2,7 +2,7 @@
  * Copyright (c) 2024 Paul Sobolik
  * Created 2024-02-06
  */
-use crate::models::trust_model::TrustModel;
+use crate::TrustModel;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]

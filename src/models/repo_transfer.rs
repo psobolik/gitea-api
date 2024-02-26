@@ -3,8 +3,7 @@
  * Created 2024-02-07
  */
 
-use crate::models::team::Team;
-use crate::models::user::User;
+use crate::{Team, User};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]

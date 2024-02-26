@@ -3,12 +3,7 @@
  * Created 2024-02-06
  */
 
-use crate::models::external_tracker::ExternalTracker;
-use crate::models::external_wiki::ExternalWiki;
-use crate::models::internal_tracker::InternalTracker;
-use crate::models::permissions::Permissions;
-use crate::models::repo_transfer::RepoTransfer;
-use crate::models::user::User;
+use crate::{ExternalTracker, ExternalWiki, InternalTracker, Permissions, RepoTransfer, User};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
